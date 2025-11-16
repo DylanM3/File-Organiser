@@ -9,6 +9,8 @@ import shutil
 
 # Define variables
 folderFiles = []
+nameList = []
+extensionList = []
 
 # Define extensionMap (reversed dict)
 extensionMap = {
@@ -88,14 +90,24 @@ for item in folderContents:
     if os.path.isfile(itemPath):
         folderFiles.append(item)
 
-print(folderContents)
-print(folderFiles)
-
 # === Milestone 3 – Split Files into Name + Extension ===
+
 # For each file:
-#   Split base name and extension
-#   Normalize extension (.lower())
-#   Append to files, name, extension lists
+for file in folderFiles:
+
+    # Split base name and extension
+    baseName, extension = os.path.splitext(file)
+
+    # Normalize extension with .lower()
+    extension = extension.lower()
+
+    # Append to name and extension lists
+    nameList.append(baseName)
+    extensionList.append(extension)
+
+print(folderFiles)
+print(nameList)
+print(extensionList)
 
 # === Milestone 4 – Create Folders Using extensionMap ===
 # Build a set of unique extensions
