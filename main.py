@@ -8,6 +8,7 @@ import os
 import shutil
 
 # Define variables
+folderFiles = []
 
 # Define extensionMap (reversed dict)
 extensionMap = {
@@ -62,10 +63,33 @@ extensionMap = {
 }
 
 # === Milestone 2 – Get Folder Contents ===
-# Prompt user for folder path
-# Validate path exists (FileNotFoundError)
-# Validate permissions (PermissionError)
+
+while True:
+    # Prompt user for folder path
+    folderPath = input("Folder Path: ")
+    
+    try:
+        # Get folder contents
+        folderContents = os.listdir(folderPath)
+        break
+        # Validate path exists (FileNotFoundError)
+    except FileNotFoundError:
+        print("Please confirm folder exists...")
+        # Validate permissions (PermissionError)
+    except PermissionError:
+        print("Please confirm you have privileges to access this folder...")
+
 # List all files (ignore directories)
+for item in folderContents:
+    # Reconstruct file path for use with isfile()
+    itemPath = os.path.join(folderPath, item)
+
+    # If item is a file than append to file only list
+    if os.path.isfile(itemPath):
+        folderFiles.append(item)
+
+print(folderContents)
+print(folderFiles)
 
 # === Milestone 3 – Split Files into Name + Extension ===
 # For each file:
