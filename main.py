@@ -1,7 +1,7 @@
 # PYTHON FILE ORGANISER
 # ====== ==== =========
 
-# === Milestone 1 – Basic Setup ===
+# === Milestone 1 - Basic Setup ===
 
 # Import modules
 import os
@@ -64,7 +64,7 @@ extensionMap = {
     ".sh": "Code"
 }
 
-# === Milestone 2 – Get Folder Contents ===
+# === Milestone 2 - Get Folder Contents ===
 
 while True:
     # Prompt user for folder path
@@ -90,7 +90,7 @@ for item in folderContents:
     if os.path.isfile(itemPath):
         folderFiles.append(item)
 
-# === Milestone 3 – Split Files into Name + Extension ===
+# === Milestone 3 - Split Files into Name + Extension ===
 
 # For each file:
 for file in folderFiles:
@@ -105,24 +105,40 @@ for file in folderFiles:
     nameList.append(baseName)
     extensionList.append(extension)
 
-print(folderFiles)
-print(nameList)
-print(extensionList)
+# === Milestone 4 - Create Folders Using extensionMap ===
 
-# === Milestone 4 – Create Folders Using extensionMap ===
-# Build a set of unique extensions
-# Loop through the set:
-#   Lookup folder in extensionMap
-#   Create folder if it doesn’t exist (os.mkdir or os.makedirs)
+# Build a set of unique extensions (lowercase)
+uniqueExtensions = set(extensionList)
 
-# === Milestone 5 – Sort / Move Files ===
-# Loop through all files
-# Lookup folder using normalized extension (extensionMap)
-# Construct source and destination paths
-# Move file with shutil.move
-# Handle exceptions (file exists, permission errors)
+# Loop through each unique extension
+for extension in uniqueExtensions:
+    # Lookup folder in extensionMap
+    currentCategory = extensionMap.get(extension)
 
-# === Milestone 6 – Optional Improvements ===
+    # Create "Other" folder for unknown files
+    if currentCategory == None:
+        try:
+            os.mkdir(os.path.join(folderPath, "Other"))
+        except FileExistsError:
+            continue
+    else:
+        try:
+            os.mkdir(os.path.join(folderPath, currentCategory))
+        except FileExistsError:
+            continue
+
+# === Milestone 5 - Sort / Move Files ===
+# Loop through all files in folderFiles
+# Get the extension from extensionList
+# Lookup folder in extensionMap
+# Use "Other" if extension not found
+# Construct full source path (folder + file)
+# Construct full destination path (target folder + file)
+# Move file into the correct folder
+# Handle FileExistsError or PermissionError gracefully
+
+
+# === Milestone 6 - Optional Improvements ===
 # Handle multi-dot extensions (.tar.gz) if needed
 # Skip hidden/system files (.DS_Store, Thumbs.db)
 # Print a summary of files moved per folder
