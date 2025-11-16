@@ -68,7 +68,11 @@ extensionMap = {
 
 while True:
     # Prompt user for folder path
-    folderPath = input("Folder Path: ")
+    folderPath = input("Leave blank to default to current folder / directory\nFolder Path: ")
+
+    if not folderPath.strip(): # If left blank
+        # Use the folder where this .py file is located
+        folderPath = os.path.dirname(os.path.abspath(__file__))
 
     # Prepare log
     log = open(os.path.join(folderPath, "log.txt"), 'w')
