@@ -128,15 +128,47 @@ for extension in uniqueExtensions:
             continue
 
 # === Milestone 5 - Sort / Move Files ===
-# Loop through all files in folderFiles
-# Get the extension from extensionList
-# Lookup folder in extensionMap
-# Use "Other" if extension not found
-# Construct full source path (folder + file)
-# Construct full destination path (target folder + file)
-# Move file into the correct folder
-# Handle FileExistsError or PermissionError gracefully
 
+# Loop through all files in folderFiles
+for index in range(0, len(folderFiles)):
+    # Get the extension from extensionList
+    currentExtension = extensionList[index]
+
+    # Lookup folder in extensionMap
+    currentCategory = extensionMap.get(currentExtension)
+
+    # Use "Other" if extension not found
+    if currentCategory == None:
+
+        # Create full folder paths
+        sourcePath = os.path.join(folderPath, folderFiles[index])
+        destinationPath = os.path.join(folderPath, "Other", folderFiles[index])
+
+        # Move file into the correct folder while excepting errors
+        try:
+            shutil.move(sourcePath, destinationPath)
+        except FileExistsError:
+            print("LOG: File already exists...")
+            continue
+        except PermissionError:
+            print("LOG: Missing permissions...")
+            continue
+
+    else: # IF CURRENT CATEGORY IS NOT NONE
+
+        # Create full folder paths
+        sourcePath = os.path.join(folderPath, folderFiles[index])
+        destinationPath = os.path.join(folderPath, currentCategory, folderFiles[index])
+
+        # Move file into the correct folder while excepting errors
+        try:
+            shutil.move(sourcePath, destinationPath)
+        except FileExistsError:
+            print("LOG: File already exists...")
+            continue
+        except PermissionError:
+            print("LOG: Missing permissions...")
+            continue
 
 # === Milestone 6 - Optional Improvements ===
 # Handle multi-dot extensions (.tar.gz) if needed
