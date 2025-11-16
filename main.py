@@ -7,6 +7,7 @@ import os
 files = [] # Full file name
 name = [] # File Name without Extensions
 extension = [] # File Extensions without Name
+seenExtensions = [] # Tracks all seen extensions
 
 supportedExtensions = {
     "Documents": [".txt", ".pdf", ".docx",
@@ -31,9 +32,6 @@ supportedExtensions = {
              ".css", ".java", ".c",
              ".cpp", ".rb", ".php",
              ".sh"],
-    
-    "Other": [".iso", ".exe", ".dll",
-              ".log", ".json", ".csv"]
 }
 
 # === CREATE LIST OF FOLDER CONTENTS ===
@@ -65,7 +63,18 @@ for item in folderContents:
         name.append(root)
         extension.append(ext)
 
-print(folderContents) # Everything
-print(files) # Only Files
-print(name) # File name WITH PATH
-print(extension) # File Extensions
+# === REMOVE DUPLICATE EXTENSIONS IN NEW LIST ===
+
+for ext in extension:
+    print(ext)
+
+    for supportedExt in supportedExtensions:
+        if ext in supportedExtensions[supportedExt]:
+            if ext not in seenExtensions:
+                seenExtensions.append(ext)
+print(seenExtensions)
+# print(folderContents) # Everything
+# print(files) # Only Files
+# print(name) # File name WITH PATH
+# print(extension) # File Extensions
+# print(seenExtensions) # Prints all seen extensions
