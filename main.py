@@ -69,16 +69,25 @@ extensionMap = {
 while True:
     # Prompt user for folder path
     folderPath = input("Folder Path: ")
+
+    # Prepare log
+    log = open(os.path.join(folderPath, "log.txt"), 'w')
+    log.write(f"Folder Path: {folderPath} \n")
     
+    # Get folder contents
     try:
-        # Get folder contents
         folderContents = os.listdir(folderPath)
+        log.write("Successfully fetched folder contents. \n")
         break
-        # Validate path exists (FileNotFoundError)
+
+    # Validate path exists (FileNotFoundError)
     except FileNotFoundError:
+        log.write("Cannot find folder. \n")
         print("Please confirm folder exists...")
-        # Validate permissions (PermissionError)
+
+    # Validate permissions (PermissionError)
     except PermissionError:
+        log.write("Insuffient privileges. \n")
         print("Please confirm you have privileges to access this folder...")
 
 # List all files (ignore directories)
@@ -119,18 +128,23 @@ for extension in uniqueExtensions:
     if currentCategory == None:
         try:
             os.mkdir(os.path.join(folderPath, "Other"))
+            log.write("Successfully created 'other' catch-all folder. \n")
         except FileExistsError:
+            log.write("'Other' folder already exists. \n")
             continue
     else:
         try:
             os.mkdir(os.path.join(folderPath, currentCategory))
+            log.write(f"Successfully created '{currentCategory}' folder. \n")
         except FileExistsError:
+            log.write(f"'{currentCategory}' folder already exists. \n")
             continue
 
 # === Milestone 5 - Sort / Move Files ===
 
 # Loop through all files in folderFiles
 for index in range(0, len(folderFiles)):
+
     # Get the extension from extensionList
     currentExtension = extensionList[index]
 
@@ -148,10 +162,10 @@ for index in range(0, len(folderFiles)):
         try:
             shutil.move(sourcePath, destinationPath)
         except FileExistsError:
-            print("LOG: File already exists...")
+            log.write("File already exists in folder... \n")
             continue
         except PermissionError:
-            print("LOG: Missing permissions...")
+            log.write("Missing permissions to move file... \n")
             continue
 
     else: # IF CURRENT CATEGORY IS NOT NONE
@@ -164,14 +178,12 @@ for index in range(0, len(folderFiles)):
         try:
             shutil.move(sourcePath, destinationPath)
         except FileExistsError:
-            print("LOG: File already exists...")
+            log.write("File already exists in folder... \n")
             continue
         except PermissionError:
-            print("LOG: Missing permissions...")
+            log.write("Missing permissions to move file... \n")
             continue
 
-# === Milestone 6 - Optional Improvements ===
-# Handle multi-dot extensions (.tar.gz) if needed
-# Skip hidden/system files (.DS_Store, Thumbs.db)
-# Print a summary of files moved per folder
-# Add user-friendly messages for progress
+# === Milestone 6 - Log ===
+log.write("Finished process. \n")
+log.close()
