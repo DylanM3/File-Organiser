@@ -63,16 +63,28 @@ for item in folderContents:
         name.append(root)
         extension.append(ext)
 
-# === REMOVE DUPLICATE EXTENSIONS IN NEW LIST ===
+# === CREATE NEW DIRECTORIES ===
 
+# For each found extension
 for ext in extension:
-    print(ext)
-
+    # For each extension in the supported extension dictionary
     for supportedExt in supportedExtensions:
+        # If found extension is in supported extensions
         if ext in supportedExtensions[supportedExt]:
-            if ext not in seenExtensions:
-                seenExtensions.append(ext)
-print(seenExtensions)
+            # And if its not already been seen
+            if supportedExt not in seenExtensions:
+                # Add it to a seen extensions list
+                seenExtensions.append(supportedExt)
+                # Reconstruct the folder path
+                folderPath = os.path.join(filePath, supportedExt)
+
+                # Try to make a folder
+                try:
+                    os.mkdir(folderPath)
+                # If it already exists then skip this iteration
+                except FileExistsError:
+                    continue
+
 # print(folderContents) # Everything
 # print(files) # Only Files
 # print(name) # File name WITH PATH
